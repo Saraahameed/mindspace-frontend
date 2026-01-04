@@ -1,35 +1,28 @@
+// src/components/SignUpForm/SignUpForm.jsx
 import { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import { signUp } from '../../services/authService';
-import { UserContext } from '../../contexts/UserContext';
+import { AuthContext } from '../../context/AuthContext';
 import './SignUpForm.css';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
 
 const SignUpForm = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { login } = useContext(AuthContext);
   const [message, setMessage] = useState('');
-  const [userType, setUserType] = useState('tourCompany');
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    phone: '',
     password: '',
     passwordConf: '',
-    description: '',
-    role: 'tourCompany'
   });
   const [errors, setErrors] = useState({
     username: '',
     email: '',
-    phone: '',
     password: '',
     passwordConf: '',
-    description: '',
   });
 
-  const { username, email, phone, password, passwordConf, description } = formData;
+  const { username, email, password, passwordConf } = formData;
 
   const checkErrors = ({ target }) => {
     if (target.name === 'username') {
@@ -48,16 +41,6 @@ const SignUpForm = () => {
         email:
           !emailRegex.test(target.value)
             ? 'Please enter a valid email address.'
-            : '',
-      });
-    }
-    if (target.name === 'phone') {
-      const phoneRegex = /^\d{8}$/;
-      setErrors({
-        ...errors,
-        phone:
-          !phoneRegex.test(target.value) 
-            ? 'Phone must be at least 8 digits (numbers only).'
             : '',
       });
     }
@@ -84,16 +67,6 @@ const SignUpForm = () => {
             : '',
       });
     }
-    if (target.name === 'description' && userType === 'tourCompany') {
-      const wordCount = target.value.trim().split(/\s+/).length;
-      setErrors({
-        ...errors,
-        description:
-          wordCount < 3 && target.value.length > 0
-            ? 'Description must be at least three words long.'
-            : '',
-      });
-    }
   };
 
   const handleChange = (event) => {
@@ -101,25 +74,8 @@ const SignUpForm = () => {
     setFormData({ 
       ...formData, 
       [event.target.name]: event.target.value,
-      role: userType
     });
     checkErrors(event);
-  };
-
-  const handleUserTypeChange = (type) => {
-    setUserType(type);
-    setFormData({
-      ...formData,
-      role: type,
-      description: type === 'customer' ? '' : formData.description
-    });
-    
-    if (type === 'customer') {
-      setErrors({
-        ...errors,
-        description: ''
-      });
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -128,14 +84,13 @@ const SignUpForm = () => {
       const submitData = {
         username,
         email,
-        phone,
         password,
-        role: userType,
-        ...(userType === 'tourCompany' && { description })
+        role: 'customer'
       };
 
-      const newUser = await signUp(submitData);
-      setUser(newUser);
+      const response = await signUp(submitData);
+      const token = localStorage.getItem('token');
+      login(response, token);
       navigate('/');
     } catch (err) {
       setMessage(err.message);
@@ -143,37 +98,13 @@ const SignUpForm = () => {
   };
 
   const formIsInvalid = Object.values(errors).some(Boolean);
-  const formHasMissingData = !(username && email && phone && password && passwordConf);
+  const formHasMissingData = !(username && email && password && passwordConf);
 
   return (
-    <>      
-    
-    <Header />
     <main className="signup-container">
       <h1>Sign Up</h1>
-      
-      {/* Role Toggle Buttons */}
-      <div className="role-toggle">
-        <h3>I am a:</h3>
-        <div className="role-buttons">
-          <button 
-            type="button"
-            onClick={() => handleUserTypeChange('tourCompany')}
-            className={`role-button ${userType === 'tourCompany' ? 'active' : ''}`}
-          >
-            Tour Company
-          </button>
-          <button 
-            type="button"
-            onClick={() => handleUserTypeChange('customer')}
-            className={`role-button ${userType === 'customer' ? 'active' : ''}`}
-          >
-            Customer
-          </button>
-        </div>
-      </div>
 
-      <p style={{ color: 'red' }}>{message}</p>
+      {message && <p style={{ color: 'red' }}>{message}</p>}
       <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label htmlFor="username">Username: </label>
@@ -198,20 +129,6 @@ const SignUpForm = () => {
             required
           />
           {errors.email && <p className="error-message">{errors.email}</p>}
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="phone">Phone: </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={phone}
-            onChange={handleChange}
-            required
-            placeholder="12345678 (numbers only)"
-          />
-          {errors.phone && <p className="error-message">{errors.phone}</p>}
         </div>
         
         <div className="form-group">
@@ -241,22 +158,6 @@ const SignUpForm = () => {
           {errors.passwordConf && <p className="error-message">{errors.passwordConf}</p>}
         </div>
 
-        {/* Description - Only for Tour Companies */}
-        {userType === 'tourCompany' && (
-          <div className="form-group">
-            <label htmlFor="description">Company Description: </label>
-            <textarea
-              id="description"
-              name="description"
-              value={description}
-              onChange={handleChange}
-              rows="3"
-              placeholder="Tell us about your company (at least 3 words)..."
-            />
-            {errors.description && <p className="error-message">{errors.description}</p>}
-          </div>
-        )}
-
         <button type="submit" className="submit-button" disabled={formIsInvalid || formHasMissingData}>
           Sign Up
         </button>
@@ -267,8 +168,6 @@ const SignUpForm = () => {
         Already have an account? <Link to='/sign-in'>Sign In</Link>
       </p>
     </main>
-    <Footer />
-    </>
   );
 };
 

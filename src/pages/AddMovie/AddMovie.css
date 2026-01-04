@@ -1,0 +1,100 @@
+/* src/pages/AddMovie.css */
+.add-movie-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.add-movie-title {
+  font-size: 2rem;
+  color: #1a1a2e;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.add-movie-error {
+  color: #e74c3c;
+  text-align: center;
+  padding: 1rem;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.add-movie-form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-movie-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.add-movie-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.add-movie-form-group input,
+.add-movie-form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.add-movie-form-group input:focus,
+.add-movie-form-group textarea:focus {
+  outline: none;
+  border-color: #16c79a;
+}
+
+.add-movie-form-group textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+.add-movie-button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-movie-submit-btn {
+  flex: 1;
+  background-color: #16c79a;
+  color: #fff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.add-movie-submit-btn:hover {
+  background-color: #13a583;
+}
+
+.add-movie-cancel-btn {
+  flex: 1;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.add-movie-cancel-btn:hover {
+  background-color: #c0392b;
+}

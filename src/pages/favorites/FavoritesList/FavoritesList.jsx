@@ -1,12 +1,11 @@
-// src/components/favorites/FavoritesList/FavoritesList.jsx
-
+// src/pages/favorites/FavoritesList/FavoritesList.jsx
 import { useState, useContext, useEffect } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
-import * as favoritesService from '../../../services/favoritesService';
+import { AuthContext } from '../../../context/AuthContext';
+import * as favouritesService from '../../../services/favouritesService';
 import './FavoritesList.css';
 
 const FavoritesList = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -19,8 +18,8 @@ const FavoritesList = () => {
       }
 
       try {
-        const fetchedFavorites = await favoritesService.index();
-        setFavorites(fetchedFavorites);
+        const data = await favouritesService.getFavourites(user._id);
+        setFavorites(data.favourites || []);
       } catch (err) {
         setMessage(err.message);
       } finally {
@@ -31,11 +30,12 @@ const FavoritesList = () => {
     fetchFavorites();
   }, [user]);
 
-  const handleRemoveFavorite = async (tourId) => {
+  const handleRemoveFavorite = async (movieId) => {
     try {
-      await favoritesService.removeFavorite(tourId);
-      setFavorites(favorites.filter(fav => fav._id !== tourId));
+      await favouritesService.removeFavourite(user._id, movieId);
+      setFavorites(favorites.filter(fav => fav._id !== movieId));
       setMessage('Removed from favorites');
+      setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       setMessage(err.message);
     }
@@ -55,7 +55,7 @@ const FavoritesList = () => {
   if (loading) {
     return (
       <main className="favorites-list-container">
-        <div className="favorites-loading">
+        <div className="favorites-list-empty">
           <h1>Favorites</h1>
           <p>Loading...</p>
         </div>
@@ -66,41 +66,48 @@ const FavoritesList = () => {
   return (
     <main className="favorites-list-container">
       <div className="favorites-list-header">
-        <h1>My Favorites</h1>
+        <h1 className="favorites-list-title">My Favorite Movies</h1>
       </div>
-      {message && <div className="favorites-message success">{message}</div>}
+      
+      {message && (
+        <div className="favorites-message">
+          {message}
+        </div>
+      )}
 
       {favorites.length === 0 ? (
         <div className="favorites-list-empty">
-          <p>You have no favorite tours yet.</p>
+          <p>You have no favorite movies yet.</p>
+          <p>Start adding movies to your favorites!</p>
         </div>
       ) : (
-        <ul className="favorites-list">
-          {favorites.map((favorite) => {
-            const tour = favorite.tour;
-
-            if (!tour) {
-              return null;
-            }
-
-            return (
-              <li key={favorite._id}>
-                <h2>{tour.title}</h2>
-                <p>{tour.description}</p>
-                <p><strong>Category:</strong> {tour.category}</p>
-                <p><strong>Location:</strong> {tour.location?.cities?.join(', ')}, {tour.location?.country}</p>
-                <p><strong>Duration:</strong> {tour.duration?.days} days, {tour.duration?.nights} nights</p>
-                <p><strong>Price:</strong> ${tour.pricing?.adult?.price} per adult</p>
-                <p><strong>Company:</strong> {tour.company?.username}</p>
-                <p><strong>Trip Start Date:</strong> {new Date(tour.tripStartDate).toLocaleDateString()}</p>
-                <p><strong>Trip End Date:</strong> {new Date(tour.tripEndDate).toLocaleDateString()}</p>
-                <button onClick={() => handleRemoveFavorite(tour._id)}>
+        <div className="favorites-grid">
+          {favorites.map((movie) => (
+            <div key={movie._id} className="favorites-card">
+              <img 
+                src={movie.image} 
+                alt={movie.title}
+                className="favorites-card-image"
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/300x450?text=No+Image';
+                }}
+              />
+              <div className="favorites-card-content">
+                <h2 className="favorites-card-title">{movie.title}</h2>
+                <p className="favorites-card-description">{movie.description}</p>
+                <div className="favorites-card-rating">
+                  {'⭐'.repeat(Math.round(movie.rating))} ({movie.rating}/5)
+                </div>
+                <button 
+                  onClick={() => handleRemoveFavorite(movie._id)}
+                  className="favorites-remove-btn"
+                >
                   Remove from Favorites
                 </button>
-              </li>
-            );
-          })}
-        </ul>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </main>
   );

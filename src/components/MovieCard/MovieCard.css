@@ -1,0 +1,89 @@
+/* src/components/MovieCard/MovieCard.css */
+.movie-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.movie-card-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.movie-card-content {
+  padding: 1.5rem;
+}
+
+.movie-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #1a1a2e;
+}
+
+.movie-card-description {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.movie-card-rating {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.movie-card-author {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.movie-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.movie-card-owner-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.movie-card-edit-btn {
+  flex: 1;
+  background-color: #16c79a;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.movie-card-edit-btn:hover {
+  background-color: #13a583;
+}
+
+.movie-card-delete-btn {
+  flex: 1;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.movie-card-delete-btn:hover {
+  background-color: #c0392b;
+}

@@ -1,12 +1,11 @@
-// src/components/favorites/FavoriteButton/FavoriteButton.jsx
-
+// src/pages/favorites/FavoriteButton/FavoriteButton.jsx
 import { useState, useContext, useEffect } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
-import * as favoritesService from '../../../services/favoritesService';
+import { AuthContext } from '../../../context/AuthContext';
+import * as favouritesService from '../../../services/favouritesService';
 import './FavoriteButton.css';
 
-const FavoriteButton = ({ tourId }) => {
-  const { user } = useContext(UserContext);
+const FavoriteButton = ({ movieId }) => {
+  const { user } = useContext(AuthContext);
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -16,10 +15,9 @@ const FavoriteButton = ({ tourId }) => {
       if (!user) return;
 
       try {
-        const favorites = await favoritesService.index();
-        const favorited = favorites.some(
-          fav => fav.tour && fav.tour._id === tourId
-        );
+        const data = await favouritesService.getFavourites(user._id);
+        const favorites = data.favourites || [];
+        const favorited = favorites.some(fav => fav._id === movieId);
         setIsFavorited(favorited);
       } catch (err) {
         console.log(err);
@@ -27,7 +25,7 @@ const FavoriteButton = ({ tourId }) => {
     };
 
     checkIfFavorited();
-  }, [user, tourId]);
+  }, [user, movieId]);
 
   const handleToggleFavorite = async () => {
     setMessage('');
@@ -35,11 +33,11 @@ const FavoriteButton = ({ tourId }) => {
 
     try {
       if (isFavorited) {
-        await favoritesService.removeFavorite(tourId);
+        await favouritesService.removeFavourite(user._id, movieId);
         setIsFavorited(false);
         setMessage('Removed from favorites');
       } else {
-        await favoritesService.addFavorite(tourId);
+        await favouritesService.addFavourite(user._id, movieId);
         setIsFavorited(true);
         setMessage('Added to favorites');
       }
@@ -57,13 +55,13 @@ const FavoriteButton = ({ tourId }) => {
   return (
     <div className="favorite-button-container">
       <button
-        className="favorite-button"
+        className={`favorite-button ${isFavorited ? 'favorited' : ''}`}
         onClick={handleToggleFavorite}
         disabled={loading}
       >
-        {loading ? 'Loading...' : isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+        {loading ? 'Loading...' : isFavorited ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
       </button>
-      {message && <p className="favorite-message success">{message}</p>}
+      {message && <p className="favorite-message">{message}</p>}
     </div>
   );
 };
