@@ -1,4 +1,3 @@
-// src/pages/favorites/FavoritesList/FavoritesList.jsx
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 import * as favouritesService from '../../../services/favouritesService';

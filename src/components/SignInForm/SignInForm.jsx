@@ -1,4 +1,3 @@
-// src/components/SignInForm/SignInForm.jsx
 import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signIn } from '../../services/authService';
