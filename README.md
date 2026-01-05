@@ -50,7 +50,7 @@ CSS
 
 - Projects Folder  
 - GA Lessons  
-- CodePen and GitHub Copilot (used for CSS to enhance professional look)  
+- CodePen (used for CSS to enhance professional look)  
 
 
 ## 🖼 Wireframes
