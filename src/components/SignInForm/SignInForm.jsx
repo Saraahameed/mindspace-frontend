@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signIn } from '../../services/authService';
 import { AuthContext } from '../../context/AuthContext';
-import './SignInForm.css';
 
 const SignInForm = () => {
   const navigate = useNavigate();
