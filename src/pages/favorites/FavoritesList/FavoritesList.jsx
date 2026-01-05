@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 import * as favouritesService from '../../../services/favouritesService';
-import './FavoritesList.css';
 
 const FavoritesList = () => {
   const { user } = useContext(AuthContext);

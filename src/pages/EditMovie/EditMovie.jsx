@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import * as moviesService from '../../services/moviesService';
-import './EditMovie.css';
 
 const EditMovie = () => {
   const { user } = useContext(AuthContext);

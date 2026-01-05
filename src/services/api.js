@@ -1,4 +1,3 @@
-// src/services/api.js
 const BASE_URL = 'http://localhost:3001';
 
 const getToken = () => {

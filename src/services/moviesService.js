@@ -1,4 +1,3 @@
-// src/services/moviesService.js
 import api from './api';
 
 export const getAllMovies = async () => {

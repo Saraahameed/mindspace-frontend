@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import * as moviesService from '../../services/moviesService';
 import MovieCard from '../../components/MovieCard/MovieCard';
-import './MovieList.css';
 
 const MovieList = () => {
   const { user } = useContext(AuthContext);

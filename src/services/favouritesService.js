@@ -1,4 +1,3 @@
-// src/services/favouritesService.js
 import api from './api';
 
 export const getFavourites = async (userId) => {
