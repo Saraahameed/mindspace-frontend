@@ -52,9 +52,6 @@ CSS
 - GA Lessons  
 - CodePen and GitHub Copilot (used for CSS to enhance professional look)  
 
-## 🗂 Older Projects
-
-- List previous projects or references you worked on here  
 
 ## 🖼 Wireframes
 
